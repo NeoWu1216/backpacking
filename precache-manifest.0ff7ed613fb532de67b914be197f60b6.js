@@ -8,19 +8,19 @@ self.__precacheManifest = [
     "url": "/backpacking/static/js/runtime~main.d2db59dc.js"
   },
   {
-    "revision": "af06f32111679f59d480",
-    "url": "/backpacking/static/js/main.af06f321.chunk.js"
+    "revision": "942cda4440d819d2373b",
+    "url": "/backpacking/static/js/main.942cda44.chunk.js"
   },
   {
     "revision": "c88c70e5f4ff8bea6fac",
     "url": "/backpacking/static/js/2.c88c70e5.chunk.js"
   },
   {
-    "revision": "af06f32111679f59d480",
-    "url": "/backpacking/static/css/main.26217455.chunk.css"
+    "revision": "942cda4440d819d2373b",
+    "url": "/backpacking/static/css/main.92aba101.chunk.css"
   },
   {
-    "revision": "bff6295b215c27454df96f63d07e117a",
+    "revision": "d01c48a3e366c51c0e0f5a1dab8a27c3",
     "url": "/backpacking/index.html"
   }
 ];
