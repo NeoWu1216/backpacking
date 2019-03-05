@@ -1,15 +1,15 @@
 .banner > * {
   z-index : 1;
   margin: 2.5vh 0;
-  -webkit-transition: all 1.6s ease;
-  -moz-transition: all 1.6s ease;
-  transition: all 1.6s ease;
   color: cyan;
   text-shadow: -.9px 0 green, 0 .9px green, 
   .9px 0 green, 0 -.9px green;
   /* color: rgb(255, 68, 11); */
   font-weight: bold;
   border-radius: 1%;
+  -webkit-transition: all 1.6s ease;
+  -moz-transition: all 1.6s ease;
+  transition: all 1.6s ease;
 }
 
 .banner {
@@ -22,7 +22,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  -webkit-transition: all 1.6s ease;
-  -moz-transition: all 1.6s ease;
-  transition: all 1.6s ease;
+  /*-webkit-transition: all 1.6s ease;*/
+  /*-moz-transition: all 1.6s ease;*/
+  /*transition: all 1.6s ease;*/
 }
