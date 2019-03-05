@@ -1,16 +1,10 @@
-#main-img {
-  background-image: linear-gradient(135deg, rgba(158, 46, 124, 0.1) 0%, rgba(90, 199, 85, 0.15) 50%), 
-  url('http://www.croatian-islands.com/wp-content/uploads/2017/03/Backpacking-for-Beginners.jpg');
-}
-
-
 .banner > * {
   z-index : 1;
   margin: 2.5vh 0;
   transition: all 1.6s ease 0s;
   color: cyan;
-  text-shadow: -.9px 0 black, 0 .9px black, 
-  .9px 0 black, 0 -.9px black;
+  text-shadow: -.9px 0 green, 0 .9px green, 
+  .9px 0 green, 0 -.9px green;
   /* color: rgb(255, 68, 11); */
   font-weight: bold;
   border-radius: 1%;
