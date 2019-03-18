@@ -4,9 +4,13 @@
   "private": true,
   "homepage": "http://neowu1216.github.io/backpacking",
   "dependencies": {
+    "normalize.css": "^8.0.1",
     "react": "^16.8.3",
     "react-dom": "^16.8.3",
-    "react-scripts": "2.1.5"
+    "react-router-dom": "^4.4.0",
+    "react-scripts": "2.1.5",
+    "semantic-ui-css": "^2.4.1",
+    "semantic-ui-react": "^0.86.0"
   },
   "scripts": {
     "predeploy": "npm run build",

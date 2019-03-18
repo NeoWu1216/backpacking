@@ -1,11 +1,26 @@
 import React, { Component } from 'react';
-import Homepage from './components/homepage.jsx'
+import Homepage from './components/HomePage'
+import DashBoard from './components/DashBoard'
+import { BrowserRouter as Router, Route, Link, Redirect} from "react-router-dom";
+
 
 class App extends Component {
   render() {
     return (
-      <div className="App">
-      	<Homepage/>
+      <div id="app">
+          <Router basename={process.env.PUBLIC_URL}>
+            <div className="router">
+              <Route 
+                path="/dashboard" 
+                render={(props) => <DashBoard {...props}/>} 
+              />
+
+              <Route 
+                exact path = "/"
+                render={()=><Homepage/>}
+              />
+            </div>
+          </Router>
       </div>
     );
   }
