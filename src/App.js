@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import Homepage from './components/HomePage'
 import DashBoard from './components/DashBoard'
-import { BrowserRouter as Router, Route, Link, Redirect} from "react-router-dom";
-
+import { BrowserRouter as Router, Route} from "react-router-dom";
 
 class App extends Component {
   render() {

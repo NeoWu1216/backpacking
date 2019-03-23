@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import BlogList from './BlogList'
 import FriendList from './FriendList'
 import { Route, Redirect, withRouter } from 'react-router-dom'
-
+import BlogCreation from './BlogCreation'
 class DashBoard extends Component {
   constructor(props) {
     super(props)
@@ -36,9 +36,11 @@ class DashBoard extends Component {
         <div className="ui top attached tabular menu">
           {this.tabs.map((name, ix) => {
             return (
-              <a className={"item" +
+              <a 
+                className={"item" +
                 ((ix === this.state.tabIx) ? " active" : "")}
-                onClick={()=>{this.redirect(ix)}}>
+                onClick={()=>{this.redirect(ix)}}
+                key = {ix}>
                 {name}
               </a>
             )
@@ -57,6 +59,11 @@ class DashBoard extends Component {
         <Route
           exact path="/dashboard"
           render={() => <Redirect to="/dashboard/blogs" />}
+        />
+
+        <Route
+          path="/dashboard/create_blog"
+          render={(props) => <BlogCreation {...props} />}
         />
 
         <Route
