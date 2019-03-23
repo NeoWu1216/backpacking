@@ -12,7 +12,9 @@
     "react-scripts": "2.1.5",
     "redux-persist": "^5.10.0",
     "semantic-ui-css": "^2.4.1",
-    "semantic-ui-react": "^0.86.0"
+    "semantic-ui-react": "^0.86.0",
+    "react-redux": "^6.0.1",
+    "redux": "^4.0.1"
   },
   "scripts": {
     "predeploy": "npm run build",
@@ -32,8 +34,6 @@
     "not op_mini all"
   ],
   "devDependencies": {
-    "gh-pages": "^2.0.1",
-    "react-redux": "^6.0.1",
-    "redux": "^4.0.1"
+    "gh-pages": "^2.0.1"
   }
 }
