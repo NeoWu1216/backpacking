@@ -18,6 +18,8 @@ class App extends Component {
                 exact path = "/"
                 render={()=><Homepage/>}
               />
+
+              
             </div>
           </Router>
       </div>
