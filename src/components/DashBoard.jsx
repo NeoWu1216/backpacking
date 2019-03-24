@@ -1,12 +1,11 @@
 import React, { Component } from 'react'
 import FriendList from './FriendList'
 import { Route, Redirect, withRouter } from 'react-router-dom'
-import BlogList from './blog/BlogList'
+import BlogOrderingList from './blog/BlogOrderingList'
 import BlogCreation from './blog/BlogCreation'
 import BlogUpdate from './blog/BlogUpdate'
 import BlogDetails from './blog/BlogDetails'
 import { connect } from 'react-redux'
-import { Divider } from 'semantic-ui-react'
 
 const mapStateToProps = (state) => {
   return {tabIx : state.tabIx}
@@ -75,7 +74,6 @@ class DashBoard extends Component {
             )})}
           </div>
         </div>
-        <Divider hidden />
 
 
         <Route
@@ -86,7 +84,7 @@ class DashBoard extends Component {
 
         <Route
           exact path="/dashboard/blogs"
-          render={(props) => <BlogList {...props} />}
+          render={(props) => <BlogOrderingList {...props} />}
         />
         
         

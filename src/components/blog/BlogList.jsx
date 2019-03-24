@@ -6,9 +6,6 @@ import {deleteArticle, changeTab, likeArticle} from '../../redux/actions/index'
 import {withRouter} from 'react-router-dom'
 import {Popup} from 'semantic-ui-react'
 
-const mapStateToProps = (state) => {
-  return {articles : state.articles}
-}
 
 const mapDispatchToProps = (dispatch) => {
   return {
@@ -92,5 +89,5 @@ class BlogList extends Component {
   }
 }
 
-BlogList = connect(mapStateToProps, mapDispatchToProps)(BlogList);
+BlogList = connect(null, mapDispatchToProps)(BlogList);
 export default withRouter(BlogList);
