@@ -6,9 +6,17 @@ import BlogCreation from './blog/BlogCreation'
 import BlogUpdate from './blog/BlogUpdate'
 import BlogDetails from './blog/BlogDetails'
 import { connect } from 'react-redux'
+import { Divider } from 'semantic-ui-react';
+import {readBlogs} from '../crud/blog'
+import './main.css'
 
 const mapStateToProps = (state) => {
   return {tabIx : state.tabIx}
+}
+const mapDispatchToProps = (dispatch) => {
+  return {
+    loadArticles : () => readBlogs()(dispatch),
+  }
 }
 
 class DashBoard extends Component {
@@ -16,6 +24,10 @@ class DashBoard extends Component {
     super(props)
     this.leftTabs = ["blogs", "friends"]
     this.rightTabs = ["create"]
+  }
+
+  componentWillMount() {
+    this.props.loadArticles()
   }
 
   redirect = (ix) => {
@@ -45,7 +57,8 @@ class DashBoard extends Component {
   render() {
     return (
       <div className="dashboard">
-        <div className="ui top attached tabular menu">
+        
+        <div className="ui top attached tabular menu inverted">
           {this.leftTabs.map((name, ix) => {
             return (
               <a 
@@ -87,7 +100,7 @@ class DashBoard extends Component {
           render={(props) => <BlogOrderingList {...props} />}
         />
         
-        
+        <Divider hidden />
 
         <Route
           path="/dashboard/blogs/create"
@@ -112,10 +125,19 @@ class DashBoard extends Component {
           path="/dashboard/friends"
           render={(props) => <FriendList {...props} />}
         />
+
+
+        <img 
+        id="background" 
+        src={require('../assets/background.jpg')}
+        alt="background"
+        />
       </div>
+
+
     )
   }
 }
 
-DashBoard = connect(mapStateToProps, null)(DashBoard)
+DashBoard = connect(mapStateToProps, mapDispatchToProps)(DashBoard)
 export default withRouter(DashBoard);

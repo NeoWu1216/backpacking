@@ -2,16 +2,15 @@ import React, { Component } from 'react'
 import {Card, Icon} from 'semantic-ui-react'
 import {connect} from 'react-redux'
 import {abbrev} from '../format'
-import {deleteArticle, changeTab, likeArticle} from '../../redux/actions/index'
+import {changeTab, likeArticle} from '../../redux/actions/index'
 import {withRouter} from 'react-router-dom'
 import {Popup} from 'semantic-ui-react'
-
+import {deleteBlog, readBlogs} from '../../crud/blog'
 
 const mapDispatchToProps = (dispatch) => {
   return {
     changeTab : (...args) => (dispatch(changeTab(...args))),
-    deleteArticle : article => dispatch(deleteArticle(article)),
-    likeArticle : (...args) => dispatch(likeArticle(...args)),
+    loadArticles : () => readBlogs()(dispatch),
   }
 }
 
@@ -23,13 +22,20 @@ class BlogList extends Component {
     e.stopPropagation()
     this.props.history.push('/dashboard/blogs/update/'+id)
   }
-  onDelete(e,id) {
+  onDelete(e, id) {
     e.stopPropagation()
-    this.props.deleteArticle(id)
+    deleteBlog(id).then((res)=>{
+      readBlogs().then(
+        this.props.loadArticles()
+      )
+     }).catch((err)=>
+      console.error(err)
+    )
   }
   onLike(e, id) {
     e.stopPropagation()
-    this.props.likeArticle(id)
+    let article = this.props.articles.find(({postid})=>postid==id);
+    article.like += 1; //doesn't work
   }
   onClickDetails(id) {
     this.props.history.push('/dashboard/blogs/details/'+id)
@@ -41,14 +47,14 @@ class BlogList extends Component {
     return (
     <Card.Group className="container-fluid">
       {articles.map(atc => (
-        <Card key = {atc.id} onClick={()=>this.onClickDetails(atc.id)}>
+        <Card key = {atc.postid} onClick={()=>this.onClickDetails(atc.postid)}>
         <Card.Content>
           <Card.Header >
               {abbrev(atc.title, 50)}
           </Card.Header>
           <Card.Meta>
             <span className='date'>
-              {(atc.dateCreated)}
+              {(atc.create_time)}
             </span>
           </Card.Meta>
           <Card.Description>
@@ -56,24 +62,24 @@ class BlogList extends Component {
           </Card.Description>
         </Card.Content>
         <Card.Content extra>
-          <a onClick={(e)=>this.onLike(e,atc.id)}>
+          <div onClick={(e)=>this.onLike(e,atc.postid)}>
             <Icon name='like' 
             />
             {atc.like} Likes
-          </a>
+          </div>
         </Card.Content>
         <Card.Content extra>
         <div className="ui buttons">
           <button 
             className="ui button positive" 
-            onClick={(e)=>this.onEdit(e,atc.id)}>
+            onClick={(e)=>this.onEdit(e,atc.postid)}>
             Edit
           </button>
           <div className="or"></div>
           <Popup trigger={
               <button 
                 className="ui button negative" 
-                onClick={(e,)=>this.onDelete(e,atc.id)}>
+                onClick={(e,)=>this.onDelete(e,atc.postid)}>
                 Delete
               </button>
             }

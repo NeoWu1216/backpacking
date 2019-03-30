@@ -5,6 +5,7 @@ import {Form, Button, Message} from 'semantic-ui-react'
 import Textarea from 'react-textarea-autosize';
 import {withRouter} from 'react-router-dom'
 import NotFound from './BlogNotFound'
+import {readBlogs, updateBlog} from '../../crud/blog'
 
 const mapStateToProps = (state) => {
   return {articles : state.articles}
@@ -12,6 +13,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    loadArticles : () => readBlogs()(dispatch),
     updateArticle : (...args) => dispatch(updateArticle(...args)),
   }
 }
@@ -20,21 +22,31 @@ class BlogUpdate extends Component {
   constructor(props) {
     super(props)
     let id = props.match.params.id;
-    let article = props.articles.find((art)=>(id==art.id));
+    this.article = props.articles.find((art)=>(id==art.postid));
 
     this.state = {
-      id,
-      article,
-      title : (article!==undefined) ? article.title : undefined,
-      content : (article!==undefined) ? article.content : undefined,
+      title : (this.article!==undefined) ? this.article.title : undefined,
+      content : (this.article!==undefined) ? this.article.content : undefined,
       formState : "",
       message: ""
     }
   }
 
-  onUpdate(title, content) {
-    let id = this.state.id
-    this.props.updateArticle(id, {title, content})
+  onUpdate(newArticle) {
+    // this.props.updateArticle(id, {title, content})
+    updateBlog(newArticle).then((res)=>{
+      this.setState({
+        formState: 'success',
+        message: "Blog successfully updated!"
+      }, ()=>this.redirectAfterSubmit(500))
+      this.props.loadArticles()
+    }).catch((err)=>{
+      console.error(err)
+      this.setState({
+        formState: 'error',
+        message: err.toString()
+      })
+    })
   }
 
   onInputChange = (e) => {
@@ -64,17 +76,15 @@ class BlogUpdate extends Component {
       })
     } else {
       this.setState({formState : 'loading'})
-      this.onUpdate(title, content)
-      this.setState({
-        formState: 'success',
-        message: "Blog successfully created!"
-      }, ()=>this.redirectAfterSubmit(500))
+      this.article.title = title
+      this.article.content = content
+      this.onUpdate(this.article)
     }
   }
 
   render() {
-    let {formState, article} = this.state;
-    if (article === undefined)
+    let {formState} = this.state;
+    if (this.article === undefined)
       return <NotFound/>
     return (
       <Form 

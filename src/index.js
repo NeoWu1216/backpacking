@@ -6,15 +6,13 @@ import * as serviceWorker from './serviceWorker';
 import 'semantic-ui-css/semantic.min.css';
 import 'normalize.css'
 import {Provider} from 'react-redux'
-import {store, persistor} from './redux/store/index'
+import {store} from './redux/store/index'
 import { PersistGate } from 'redux-persist/integration/react'
 
 
 ReactDOM.render(
   <Provider store={store}>
-    <PersistGate loading={null} persistor={persistor}>
-      <App />
-    </PersistGate>
+    <App />
   </Provider>
   ,document.getElementById('root')
 );

@@ -4,6 +4,7 @@
   "private": true,
   "homepage": "http://neowu1216.github.io/backpacking",
   "dependencies": {
+    "axios": "^0.18.0",
     "moment": "^2.24.0",
     "normalize.css": "^8.0.1",
     "react": "^16.8.3",
@@ -14,6 +15,7 @@
     "react-textarea-autosize": "^7.1.0",
     "redux": "^4.0.1",
     "redux-persist": "^5.10.0",
+    "redux-thunk": "^2.3.0",
     "semantic-ui-css": "^2.4.1",
     "semantic-ui-react": "^0.86.0"
   },

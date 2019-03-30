@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { changeTab } from '../redux/actions/index'
 import { connect } from 'react-redux'
-import { Divider } from 'semantic-ui-react'
 
 const mapDispatchToProps = (dispatch) => {
   return {
@@ -17,7 +16,6 @@ class FriendList extends Component {
   render() {
     return (
       <div>
-        <Divider hidden />
         <ul>
           <li>my friend</li>
           <li>my friend</li>

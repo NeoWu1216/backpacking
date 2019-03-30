@@ -1,3 +1,9 @@
+* {
+  margin : 0;
+  padding: 0;
+
+}
+
 .banner > * {
   z-index : 1;
   margin: 2.5vh 0;
@@ -25,4 +31,13 @@
   /*-webkit-transition: all 1.6s ease;*/
   /*-moz-transition: all 1.6s ease;*/
   /*transition: all 1.6s ease;*/
+}
+
+#background {
+  position: fixed;
+  width: 100vw;
+  height : 100vh;
+  top: 0;
+  left: 0;
+  z-index: -100;
 }

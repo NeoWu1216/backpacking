@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import {Card, Icon} from 'semantic-ui-react'
 import {connect} from 'react-redux'
-import {deleteArticle, likeArticle} from '../../redux/actions/index'
+import {deleteBlog, readBlogs} from '../../crud/blog'
 import {withRouter} from 'react-router-dom'
 import NotFound from './BlogNotFound'
 import {Popup} from 'semantic-ui-react'
@@ -10,10 +10,17 @@ const mapStateToProps = (state) => {
   return {articles : state.articles}
 }
 
+// const mapDispatchToProps = (dispatch) => {
+//   return {
+//     deleteArticle : article => dispatch(deleteArticle(article)),
+//     likeArticle : (...args) => dispatch(likeArticle(...args)),
+//   }
+// }
+
+
 const mapDispatchToProps = (dispatch) => {
   return {
-    deleteArticle : article => dispatch(deleteArticle(article)),
-    likeArticle : (...args) => dispatch(likeArticle(...args)),
+    loadArticles : () => readBlogs()(dispatch),
   }
 }
 
@@ -21,16 +28,27 @@ class BlogDetails extends Component {
   onEdit(id) {
     this.props.history.push('/dashboard/blogs/update/'+id)
   }
+
+  
+
   onDelete(id) {
-    this.props.deleteArticle(id)
+    deleteBlog(id).then((res)=>{
+      readBlogs().then(
+        this.props.loadArticles()
+      )
+     }).catch((err)=>
+      console.error(err)
+    )
   }
+
   onLike(id) {
-    this.props.likeArticle(id)
+    let article = this.props.articles.find(({postid})=>postid==id);
+    article.like += 1; //doesn't work
   }
 
   render() {
     const {articles, match} = this.props;
-    let atc = articles.find(({id})=>match.params.id==id)
+    let atc = articles.find(({postid})=>postid==match.params.id)
     if (atc === undefined)
       return <NotFound/>
 
@@ -40,7 +58,7 @@ class BlogDetails extends Component {
           <Card.Header>{atc.title}</Card.Header>
           <Card.Meta>
             <span className='date'>
-              {atc.dateCreated}
+              {atc.create_time}
             </span>
           </Card.Meta>
           <Card.Description style={{whiteSpace:'pre-wrap'}}>
@@ -58,14 +76,14 @@ class BlogDetails extends Component {
         <div className="ui buttons">
           <button 
             className="ui button positive" 
-            onClick={()=>this.onEdit(atc.id)}>
+            onClick={()=>this.onEdit(atc.postid)}>
             Edit
           </button>
           <div className="or"></div>
           <Popup trigger={
               <button 
                 className="ui button negative" 
-                onClick={()=>this.onDelete(atc.id)}>
+                onClick={()=>this.onDelete(atc.postid)}>
                 Delete
               </button>
             }

@@ -1,21 +1,24 @@
 import React, { Component } from 'react'
 import {connect} from 'react-redux'
-import { Checkbox, Menu, Dropdown, Input, Divider} from 'semantic-ui-react'
+import { Checkbox, Menu, Dropdown, Input, Divider, Loader} from 'semantic-ui-react'
 import BlogList from './BlogList'
 import moment from 'moment'
-
-
-
+import Loading from './BlogNotFound'
 
 const mapStateToProps = (state) => {
-  return {articles : state.articles}
+  return {
+    articles : state.articles,
+    loading : state.loading
+  }
 }
+
+
 
 class BlogOrderingList extends Component {
   SORT_OPTIONS = [
     {value:"title", label:"Title", text:"Title", key:"1"},
     {value:"like", label:"Likes", text:"Num of Likes", key:"2"},
-    {value:"dateCreated", label:"Date", text:"Date created", key:"3"},
+    {value:"create_time", label:"Date", text:"Date created", key:"3"},
   ]
 
   constructor(props) {
@@ -26,6 +29,8 @@ class BlogOrderingList extends Component {
       asc : false
     }
   }
+
+  
 
   onInputChange = (e) => {
     this.setState({ [e.target.id]: e.target.value })
@@ -41,6 +46,7 @@ class BlogOrderingList extends Component {
 
   filterSortArticles = (articles, keyword, sortOption, asc) => {
     console.log(sortOption)
+    console.log(articles)
     articles = articles.filter(article => 
       article.title.toLowerCase().includes(keyword.toLowerCase())
     )
@@ -48,7 +54,7 @@ class BlogOrderingList extends Component {
     return articles.sort(function(a, b){
       var sign = ((asc) ? 1 : -1);
       var va = a[sortOption], vb = b[sortOption]
-      if (sortOption === 'dateCreated')
+      if (sortOption === 'create_time')
         return sign*(moment(va).isAfter(moment(vb)) ? 1 : -1)
       return sign*((va>vb) ? 1 : -1)
     });
@@ -56,7 +62,7 @@ class BlogOrderingList extends Component {
 
   render() {
     let {keyword, sortOption, asc} = this.state;
-    let {articles} = this.props;
+    let {articles, loading} = this.props;
     return (
       <div>
       <Menu>
@@ -91,6 +97,7 @@ class BlogOrderingList extends Component {
           </Menu.Menu>
         </Menu>
         <Divider hidden />
+        <Loading message='loading...' active={loading}/>
         <BlogList 
           articles={this.filterSortArticles(
             articles,keyword,sortOption,asc)}

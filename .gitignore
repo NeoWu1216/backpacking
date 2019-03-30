@@ -46,3 +46,4 @@ chrome-user-data
 *.swp
 *.swo
 *secret*
+.idea

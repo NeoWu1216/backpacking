@@ -1,17 +1,34 @@
 import {
-  ADD_ARTICLE,
+  READ_ARTICLE_BEGIN,
+  READ_ARTICLE_FAILURE,
+  READ_ARTICLE_SUCCESS,
   DELETE_ARTICLE,
   UPDATE_ARTICLE,
   LIKE_ARTICLE,
   CHANGE_TAB
 } from '../constants/action_types'
 
-export function addArticle(payload) {
+export function readArticleBegin(payload) {
   return {
-    type: ADD_ARTICLE,
+    type: READ_ARTICLE_BEGIN,
     payload
   }
 };
+
+export function readArticleSuccess(articles) {
+  return {
+    type: READ_ARTICLE_SUCCESS,
+    articles
+  }
+};
+
+export function readArticleFailure(error) {
+  return {
+    type: READ_ARTICLE_FAILURE,
+    error
+  }
+};
+
 export function deleteArticle(id) {
   return {
     type: DELETE_ARTICLE,
