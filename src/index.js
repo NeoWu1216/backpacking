@@ -7,7 +7,6 @@ import 'semantic-ui-css/semantic.min.css';
 import 'normalize.css'
 import {Provider} from 'react-redux'
 import {store} from './redux/store/index'
-import { PersistGate } from 'redux-persist/integration/react'
 
 
 ReactDOM.render(

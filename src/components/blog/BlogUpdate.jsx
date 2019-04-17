@@ -1,14 +1,16 @@
 import React, { Component } from 'react'
-import {updateArticle} from '../../redux/actions/index'
+import {updateArticle} from '../../redux/actions'
 import {connect} from 'react-redux'
 import {Form, Button, Message} from 'semantic-ui-react'
 import Textarea from 'react-textarea-autosize';
 import {withRouter} from 'react-router-dom'
 import NotFound from './BlogNotFound'
 import {readBlogs, updateBlog} from '../../crud/blog'
+import {getMessage} from '../../crud/common'
+
 
 const mapStateToProps = (state) => {
-  return {articles : state.articles}
+  return {articles : state.blog.articles}
 }
 
 const mapDispatchToProps = (dispatch) => {
@@ -42,9 +44,10 @@ class BlogUpdate extends Component {
       this.props.loadArticles()
     }).catch((err)=>{
       console.error(err)
+      let message = getMessage(err)
       this.setState({
         formState: 'error',
-        message: err.toString()
+        message
       })
     })
   }

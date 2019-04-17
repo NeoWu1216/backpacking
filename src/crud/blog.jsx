@@ -1,6 +1,6 @@
 import axios from 'axios'
-import {rootUrl} from './rootUrl'
-import { readArticleBegin, readArticleFailure, readArticleSuccess } from '../redux/actions/index'
+import {rootUrl, handleErrors} from './common'
+import { readArticleBegin, readArticleFailure, readArticleSuccess } from '../redux/actions'
 const baseUrl = rootUrl + 'blogpost/'
 
 export function readBlogs() {
@@ -8,7 +8,6 @@ export function readBlogs() {
     dispatch(readArticleBegin())
     axios.get(baseUrl + 'list/')
     .then(handleErrors())
-    // .then(res => res.json())
     .then(json => {
       dispatch(readArticleSuccess(json.data));
       return json.data;
@@ -26,7 +25,6 @@ export function createBlog(blog) {
       blog
     )
     .then(handleErrors())
-    // .then(res => res.json())
   )
 }
 
@@ -37,7 +35,6 @@ export function updateBlog(blog) {
       blog
     )
     .then(handleErrors())
-    .then(res=> res.json)
   )
 }
 
@@ -46,19 +43,8 @@ export function deleteBlog(id) {
     axios.delete(baseUrl + 'delete/' + id
     )
     .then(handleErrors())
-    .then(res=> res.json)
   )
 }
 
 
 
-function handleErrors(ok=200) {
-  return response => {
-    console.log(response)
-    if (response.status != ok) {
-      console.warn('Response not OK')
-      throw Error(response.statusText);
-    }
-    return response;
-  }
-}

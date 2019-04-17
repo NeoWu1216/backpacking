@@ -8,10 +8,12 @@ import BlogDetails from './blog/BlogDetails'
 import { connect } from 'react-redux'
 import { Divider } from 'semantic-ui-react';
 import {readBlogs} from '../crud/blog'
+import Homepage from './HomePage'
 import './main.css'
+import {getSession, validateSession} from './auth/utils'
 
 const mapStateToProps = (state) => {
-  return {tabIx : state.tabIx}
+  return {tabIx : state.other.tabIx}
 }
 const mapDispatchToProps = (dispatch) => {
   return {
@@ -19,12 +21,32 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
+
 class DashBoard extends Component {
   constructor(props) {
     super(props)
     this.leftTabs = ["blogs", "friends"]
     this.rightTabs = ["create"]
+    this.state = {
+      authenticated : undefined
+    }
   }
+
+  componentDidMount() {
+    let {userId, token} = getSession()
+    validateSession(userId, token).then(()=>{
+      console.log('success!!')
+      this.setState({authenticated : true})
+    }).catch(() => {
+      this.setState({authenticated : false})
+    })
+  }
+
+
+  protected = (component) => {
+    return (this.state.authenticated) ? component : <Redirect to='/'/>
+  }
+  
 
   componentWillMount() {
     this.props.loadArticles()
@@ -55,6 +77,11 @@ class DashBoard extends Component {
   }
 
   render() {
+    if (this.state.authenticated===undefined) 
+      return null
+    if (this.state.authenticated===false) 
+      return <Redirect to='/'/>
+
     return (
       <div className="dashboard">
         

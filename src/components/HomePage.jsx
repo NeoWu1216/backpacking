@@ -1,5 +1,6 @@
 import React from 'react'
 import './main.css'
+import Login from './auth/Login'
 import { withRouter } from 'react-router-dom';
 
 
@@ -10,11 +11,7 @@ const Homepage = (props) => {
     <div style={{ backgroundImage }} className="banner" id="main-img">
       <h1> Backpacking </h1>
       <h3> Your ultimate dream</h3>
-      <button type="button"
-        className="btn btn-secondary btn-lg"
-        onClick={()=>{props.history.push('/dashboard')}}>
-        Starts here
-      </button>
+      <Login/>
     </div>
   )
 }

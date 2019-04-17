@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { changeTab } from '../redux/actions/index'
+import { changeTab } from '../redux/actions'
 import { connect } from 'react-redux'
 
 const mapDispatchToProps = (dispatch) => {

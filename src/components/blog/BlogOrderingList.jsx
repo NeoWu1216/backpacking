@@ -7,8 +7,8 @@ import Loading from './BlogNotFound'
 
 const mapStateToProps = (state) => {
   return {
-    articles : state.articles,
-    loading : state.loading
+    articles : state.blog.articles,
+    loading : state.blog.loading
   }
 }
 
@@ -45,8 +45,6 @@ class BlogOrderingList extends Component {
   }
 
   filterSortArticles = (articles, keyword, sortOption, asc) => {
-    console.log(sortOption)
-    console.log(articles)
     articles = articles.filter(article => 
       article.title.toLowerCase().includes(keyword.toLowerCase())
     )

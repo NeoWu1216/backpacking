@@ -19,7 +19,6 @@ class App extends Component {
                 render={()=><Homepage/>}
               />
 
-              
             </div>
           </Router>
       </div>

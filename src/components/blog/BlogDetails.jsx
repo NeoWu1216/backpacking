@@ -5,9 +5,12 @@ import {deleteBlog, readBlogs} from '../../crud/blog'
 import {withRouter} from 'react-router-dom'
 import NotFound from './BlogNotFound'
 import {Popup} from 'semantic-ui-react'
-  
+import {getMessage} from '../../crud/common'
+import CommentSection from '../comment/CommentSection'
+import '../main.css'
+
 const mapStateToProps = (state) => {
-  return {articles : state.articles}
+  return {articles : state.blog.articles}
 }
 
 // const mapDispatchToProps = (dispatch) => {
@@ -33,12 +36,11 @@ class BlogDetails extends Component {
 
   onDelete(id) {
     deleteBlog(id).then((res)=>{
-      readBlogs().then(
-        this.props.loadArticles()
-      )
-     }).catch((err)=>
-      console.error(err)
-    )
+      this.props.loadArticles()
+     }).catch((err)=>{
+      let message = getMessage(err)
+      alert(message)
+    })
   }
 
   onLike(id) {
@@ -53,7 +55,8 @@ class BlogDetails extends Component {
       return <NotFound/>
 
     return (
-        <Card fluid>
+        <Card fluid className='ui centered align grid'>
+
         <Card.Content>
           <Card.Header>{atc.title}</Card.Header>
           <Card.Meta>
@@ -61,7 +64,8 @@ class BlogDetails extends Component {
               {atc.create_time}
             </span>
           </Card.Meta>
-          <Card.Description style={{whiteSpace:'pre-wrap'}}>
+          <br/>
+          <Card.Description className='left aligned blog'>
             {atc.content}
           </Card.Description>
         </Card.Content>
@@ -92,6 +96,9 @@ class BlogDetails extends Component {
           />
         </div>
         </Card.Content>
+
+        <hr/>
+        <CommentSection />
       </Card>
     )
   }

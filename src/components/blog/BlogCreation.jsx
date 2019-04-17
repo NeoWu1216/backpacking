@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
-import { changeTab } from '../../redux/actions/index'
+import { changeTab } from '../../redux/actions'
 import { createBlog, readBlogs } from '../../crud/blog'
+import { getMessage } from '../../crud/common'
+
 import { newId } from '../format'
 import { connect } from 'react-redux'
 import { Form, Button, Message } from 'semantic-ui-react'
@@ -31,7 +33,7 @@ class BlogCreation extends Component {
   }
 
   redirectAfterSubmit = (timeout) => {
-    setTimeout(()=>this.props.history.goBack(), timeout)
+    setTimeout(()=>this.props.history.push('/dashboard'), timeout)
   }
 
 
@@ -66,17 +68,16 @@ class BlogCreation extends Component {
   onCreate(title, content) {
     let article = { title, content, id: newId(), create_time: date_to_str(new Date()), like: 0, author: 1}
     createBlog(article).then((res) => {
-      console.log(res)
       this.setState({
         formState: 'success',
         message: "Blog successfully created!"
       }, ()=>{this.redirectAfterSubmit(500)})
       this.props.loadArticles()
     }).catch((err) =>{
-      console.error(err)
+      let message = getMessage(err)
       this.setState({
         formState : 'error',
-        message : err.toString()
+        message
       })
     })
   }

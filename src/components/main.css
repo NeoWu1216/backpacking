@@ -4,18 +4,26 @@
 
 }
 
+
+
 .banner > * {
   z-index : 1;
   margin: 2.5vh 0;
-  color: cyan;
-  text-shadow: -.9px 0 green, 0 .9px green, 
-  .9px 0 green, 0 -.9px green;
+  color: white;
   /* color: rgb(255, 68, 11); */
   font-weight: bold;
   border-radius: 1%;
   -webkit-transition: all 1.6s ease;
   -moz-transition: all 1.6s ease;
   transition: all 1.6s ease;
+}
+
+.banner > h1 {
+  font-size:40px;
+}
+
+.banner > h1, .banner > h3 {
+  text-shadow: 2.5px 2.5px #4C69BA;
 }
 
 .banner {
@@ -40,4 +48,9 @@
   top: 0;
   left: 0;
   z-index: -100;
+}
+
+.blog {
+  white-space:pre-wrap;
+  margin:30px 60px;
 }
