@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Card, Icon } from 'semantic-ui-react'
+import { Card, Icon, Container, Label} from 'semantic-ui-react'
 import { connect } from 'react-redux'
 import { abbrev, date_to_str } from '../format'
 import { changeTab, likeArticle } from '../../redux/actions'
@@ -24,9 +24,9 @@ class BlogList extends Component {
     this.props.history.push('/dashboard/blogs/update/' + id)
   }
 
-  onDelete(e, id) {
+  onDelete(e, id, author) {
     e.stopPropagation()
-    deleteBlog(id).then(() => {
+    deleteBlog(id, author).then(() => {
       this.props.loadArticles()
     }).catch((err) => {
       let message = getMessage(err)
@@ -47,19 +47,22 @@ class BlogList extends Component {
   render() {
     const { articles } = this.props;
     return (
-      <div className="container">
-        <Card.Group itemsPerRow={3}>
+      <Container>
+        <Card.Group itemsPerRow={3} stackable>
           {articles.map(atc => (
             <Card key={atc.postid} onClick={() => this.onClickDetails(atc.postid)}>
               <Card.Content>
                 <Card.Header >
                   {abbrev(atc.title, 50)}
                 </Card.Header>
+                {"Author: "+((atc.author_name))}
+
                 <Card.Meta>
                   <span className='date'>
                     {((atc.create_time))}
                   </span>
                 </Card.Meta>
+                
                 <Card.Description>
                   {abbrev(atc.content, 200)}
                 </Card.Description>
@@ -68,7 +71,7 @@ class BlogList extends Component {
                 <div onClick={(e) => this.onLike(e, atc.postid)}>
                   <Icon name='like'
                   />
-                  {atc.like} Likes
+                  {atc.likenum} Likes
           </div>
               </Card.Content>
               <Card.Content extra>
@@ -82,7 +85,7 @@ class BlogList extends Component {
                   <Popup trigger={
                       <button
                         className="ui button negative"
-                        onClick={(e, ) => this.onDelete(e, atc.postid)}>
+                        onClick={(e, ) => this.onDelete(e, atc.postid, atc.author)}>
                         Delete
                       </button>
                     }
@@ -94,7 +97,7 @@ class BlogList extends Component {
             </Card>
           ))}
         </Card.Group>
-      </div>
+      </Container>
     )
   }
 }

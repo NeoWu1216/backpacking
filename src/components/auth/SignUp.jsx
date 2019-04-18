@@ -49,6 +49,7 @@ class SignUp extends Component {
         message: "Welcome!"
       }, ()=>{this.redirectAfterSubmit(500)})
     }).catch((err) =>{
+      console.log(err)
       let message = getMessage(err)
       this.setState({
         formState : 'error',

@@ -13,3 +13,7 @@ export function facebookSignUp(body) {
     body
   ).then(handleErrors())
 }
+
+export function getUser(user_id) {
+  return axios.get(baseUrl + 'users/' + user_id).then(handleErrors())
+}

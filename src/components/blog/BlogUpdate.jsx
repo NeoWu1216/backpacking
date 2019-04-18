@@ -23,8 +23,9 @@ const mapDispatchToProps = (dispatch) => {
 class BlogUpdate extends Component {
   constructor(props) {
     super(props)
-    let id = props.match.params.id;
-    this.article = props.articles.find((art)=>(id==art.postid));
+    const {articles, match} = this.props;
+    let id = match.params.id;
+    this.article = articles.find((art)=>(id==art.postid));
 
     this.state = {
       title : (this.article!==undefined) ? this.article.title : undefined,
@@ -33,6 +34,15 @@ class BlogUpdate extends Component {
       message: ""
     }
   }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.articles.length !== this.props.articles.length) {
+      this.article = nextProps.articles.find((art)=>(this.props.match.params.id==art.postid));
+      if (this.article)
+        this.setState({title: this.article.title, content: this.article.content})
+    }
+  } 
+
 
   onUpdate(newArticle) {
     // this.props.updateArticle(id, {title, content})
@@ -43,8 +53,9 @@ class BlogUpdate extends Component {
       }, ()=>this.redirectAfterSubmit(500))
       this.props.loadArticles()
     }).catch((err)=>{
-      console.error(err)
       let message = getMessage(err)
+      console.error('update failed', message)
+
       this.setState({
         formState: 'error',
         message
@@ -87,6 +98,8 @@ class BlogUpdate extends Component {
 
   render() {
     let {formState} = this.state;
+    this.article = this.props.articles.find((art)=>(this.props.match.params.id==art.postid));
+
     if (this.article === undefined)
       return <NotFound/>
     return (

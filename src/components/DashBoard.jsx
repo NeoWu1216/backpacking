@@ -7,17 +7,23 @@ import BlogUpdate from './blog/BlogUpdate'
 import BlogDetails from './blog/BlogDetails'
 import { connect } from 'react-redux'
 import { Divider } from 'semantic-ui-react';
-import {readBlogs} from '../crud/blog'
-import Homepage from './HomePage'
+import { readBlogs } from '../crud/blog'
 import './main.css'
-import {getSession, validateSession} from './auth/utils'
+import { getSession, validateSession, clearSession } from './auth/utils'
+
+
 
 const mapStateToProps = (state) => {
-  return {tabIx : state.other.tabIx}
+  return {
+    articles: state.blog.articles,
+    loading: state.blog.loading,
+    tabIx: state.other.tabIx
+  }
 }
+
 const mapDispatchToProps = (dispatch) => {
   return {
-    loadArticles : () => readBlogs()(dispatch),
+    loadArticles: () => readBlogs()(dispatch),
   }
 }
 
@@ -25,31 +31,33 @@ const mapDispatchToProps = (dispatch) => {
 class DashBoard extends Component {
   constructor(props) {
     super(props)
-    this.leftTabs = ["blogs", "friends"]
-    this.rightTabs = ["create"]
+    this.leftTabs = [
+      { name: "blogs", icon: "book" },
+      { name: "profile", icon: "user" }
+    ]
+    this.rightTabs = [{ name: "logout", icon: "power off" }]
     this.state = {
-      authenticated : undefined
+      authenticated: undefined
     }
   }
 
   componentDidMount() {
-    let {userId, token} = getSession()
-    validateSession(userId, token).then(()=>{
-      console.log('success!!')
-      this.setState({authenticated : true})
+    let { userId, token } = getSession()
+    validateSession(userId, token).then(() => {
+      this.setState({ authenticated: true })
+      this.props.loadArticles()
     }).catch(() => {
-      this.setState({authenticated : false})
+      this.setState({ authenticated: false })
     })
   }
 
 
   protected = (component) => {
-    return (this.state.authenticated) ? component : <Redirect to='/'/>
+    return (this.state.authenticated) ? component : <Redirect to='/' />
   }
-  
+
 
   componentWillMount() {
-    this.props.loadArticles()
   }
 
   redirect = (ix) => {
@@ -57,17 +65,18 @@ class DashBoard extends Component {
     if (ix < this.leftTabs.length) {
       tab = this.leftTabs[ix];
     } else {
-      tab = this.rightTabs[ix-this.leftTabs.length]
+      tab = this.rightTabs[ix - this.leftTabs.length]
     }
-    switch (tab) {
+    switch (tab.name) {
       case 'blogs':
         this.props.history.push('/dashboard/blogs');
         break;
-      case 'friends':
-        this.props.history.push('/dashboard/friends');
+      case 'profile':
+        this.props.history.push('/dashboard/profile');
         break;
-      case 'create':
-        this.props.history.push('/dashboard/blogs/create');
+      case 'logout':
+        clearSession()
+        this.props.history.replace('/');
         break;
       default:
         alert("incorrect key mapping for tabs")
@@ -77,41 +86,48 @@ class DashBoard extends Component {
   }
 
   render() {
-    if (this.state.authenticated===undefined) 
+    let { articles, loading } = this.props;
+
+    if (this.state.authenticated === undefined)
       return null
-    if (this.state.authenticated===false) 
-      return <Redirect to='/'/>
+    if (this.state.authenticated === false)
+      return <Redirect to='/' />
 
     return (
       <div className="dashboard">
-        
-        <div className="ui top attached tabular menu inverted">
-          {this.leftTabs.map((name, ix) => {
+
+        <div className="ui top attached labeled icon menu inverted">
+          {this.leftTabs.map((elem, ix) => {
+            let {name,icon} = elem
             return (
-              <a 
+              <a
                 className={"item" +
-                ((ix === this.props.tabIx) ? " active" : "")}
-                key = {ix}
-                onClick={()=>this.redirect(ix)}
-                >
+                  ((ix === this.props.tabIx) ? " active" : "")}
+                key={ix}
+                onClick={() => this.redirect(ix)}
+              >
+                <i className={icon+" icon"}></i>
                 {name}
               </a>
             )
           })}
 
           <div className="right menu">
-          {this.rightTabs.map((name, ix) => {
-            let rix = ix+this.leftTabs.length;
-            return (
-              <a 
-                className={"item" +
-                ((rix == this.props.tabIx) ? " active" : "")}
-                key = {ix}
-                onClick={()=>this.redirect(rix)}
+            {this.rightTabs.map((elem, ix) => {
+              let {name,icon} = elem
+              let rix = ix + this.leftTabs.length;
+              return (
+                <a
+                  className={"item" +
+                    ((rix == this.props.tabIx) ? " active" : "")}
+                  key={ix}
+                  onClick={() => this.redirect(rix)}
                 >
-                {name}
-              </a>
-            )})}
+                  <i className={icon+" icon"}></i>
+                  {name}
+                </a>
+              )
+            })}
           </div>
         </div>
 
@@ -124,9 +140,10 @@ class DashBoard extends Component {
 
         <Route
           exact path="/dashboard/blogs"
-          render={(props) => <BlogOrderingList {...props} />}
+          render={(props) => <BlogOrderingList {...props}
+            articles={articles} loading={loading} />}
         />
-        
+
         <Divider hidden />
 
         <Route
@@ -138,26 +155,26 @@ class DashBoard extends Component {
           path="/dashboard/blogs/details/:id"
           render={(props) => <BlogDetails {...props} />}
         />
-        
+
 
         <Route
           path="/dashboard/blogs/update/:id"
           render={(props) => <BlogUpdate {...props} />}
         />
 
-        
 
-        
+
+
         <Route
           path="/dashboard/friends"
           render={(props) => <FriendList {...props} />}
         />
 
 
-        <img 
-        id="background" 
-        src={require('../assets/background.jpg')}
-        alt="background"
+        <img
+          id="background"
+          src={require('../assets/background.jpg')}
+          alt="background"
         />
       </div>
 

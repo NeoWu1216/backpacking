@@ -8,6 +8,11 @@ function saveSession(userId, token) {
   sessionStorage.setItem('token', token)
 }
 
+function clearSession(userId, token) {
+  sessionStorage.setItem('userId', '')
+  sessionStorage.setItem('token', '')
+}
+
 function getSession() {
   let userId = sessionStorage.getItem('userId')
   let token = sessionStorage.getItem('token')
@@ -28,11 +33,11 @@ function validateSession(userId, token) {
         }).then((response)=> {
           return facebookLogin(response.data.data.user_id).then((res)=>{
             if (res.data.data === null) throw response
-            return res
+            return res.data.data
           })
         })
 }
 
 
 
-export {appId, saveSession, getSession, validateSession}
+export {appId, saveSession, getSession, validateSession, clearSession}

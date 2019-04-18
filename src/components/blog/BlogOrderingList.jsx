@@ -1,16 +1,10 @@
 import React, { Component } from 'react'
 import {connect} from 'react-redux'
-import { Checkbox, Menu, Dropdown, Input, Divider, Loader} from 'semantic-ui-react'
+import { Checkbox, Menu, Dropdown, Input, Divider, Icon, Button} from 'semantic-ui-react'
 import BlogList from './BlogList'
 import moment from 'moment'
 import Loading from './BlogNotFound'
 
-const mapStateToProps = (state) => {
-  return {
-    articles : state.blog.articles,
-    loading : state.blog.loading
-  }
-}
 
 
 
@@ -19,6 +13,7 @@ class BlogOrderingList extends Component {
     {value:"title", label:"Title", text:"Title", key:"1"},
     {value:"like", label:"Likes", text:"Num of Likes", key:"2"},
     {value:"create_time", label:"Date", text:"Date created", key:"3"},
+    {value:"author_name", label:"Author", text:"Author Name", key:"4"},
   ]
 
   constructor(props) {
@@ -58,6 +53,10 @@ class BlogOrderingList extends Component {
     });
   }
 
+  redirectNew = () => {
+    this.props.history.push('/dashboard/blogs/create')
+  }
+
   render() {
     let {keyword, sortOption, asc} = this.state;
     let {articles, loading} = this.props;
@@ -82,8 +81,7 @@ class BlogOrderingList extends Component {
               onChange={this.onSortOrderChange}/>
           </Menu.Item>
 
-          <Menu.Menu position='right'>
-            <Menu.Item>
+          <Menu.Item>
               <Input 
                 icon='search' 
                 placeholder='Search...' 
@@ -92,7 +90,18 @@ class BlogOrderingList extends Component {
                 onChange={this.onInputChange}
               />
             </Menu.Item>
+
+          <Menu.Menu position='right'>
+            <Menu.Item>
+              <Button primary icon labelPosition='right' onClick={this.redirectNew}>
+                <Icon name='add' />
+                New Blog
+              </Button>
+            </Menu.Item>
           </Menu.Menu>
+
+
+
         </Menu>
         <Divider hidden />
         <Loading message='loading...' active={loading}/>
@@ -105,5 +114,4 @@ class BlogOrderingList extends Component {
   }
 }
 
-BlogOrderingList = connect(mapStateToProps)(BlogOrderingList)
 export default BlogOrderingList;

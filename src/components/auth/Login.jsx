@@ -38,7 +38,6 @@ class Login extends Component {
   }
 
   responseFacebook = (response) => {
-    console.log(response)
     let { userID, accessToken, picture, name, email } = response;
     this.setState({ avatar: picture.data.url, name, email })
     this.updateAuthentication(userID, accessToken, (err) => alert(err))

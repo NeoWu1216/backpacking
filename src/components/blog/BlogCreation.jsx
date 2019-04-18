@@ -29,7 +29,6 @@ class BlogCreation extends Component {
   }
 
   componentWillMount() {
-    this.props.changeTab(2)
   }
 
   redirectAfterSubmit = (timeout) => {
@@ -66,7 +65,7 @@ class BlogCreation extends Component {
   }
 
   onCreate(title, content) {
-    let article = { title, content, id: newId(), create_time: date_to_str(new Date()), like: 0, author: 1}
+    let article = { title, content, id: newId(), create_time: date_to_str(new Date()), like: 0}
     createBlog(article).then((res) => {
       this.setState({
         formState: 'success',

@@ -54,3 +54,8 @@
   white-space:pre-wrap;
   margin:30px 60px;
 }
+
+.header {
+  font-size: 25px;
+  font-weight: bold;
+}

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {Card, Icon} from 'semantic-ui-react'
+import {Card, Icon, Container, Label} from 'semantic-ui-react'
 import {connect} from 'react-redux'
 import {deleteBlog, readBlogs} from '../../crud/blog'
 import {withRouter} from 'react-router-dom'
@@ -34,8 +34,8 @@ class BlogDetails extends Component {
 
   
 
-  onDelete(id) {
-    deleteBlog(id).then((res)=>{
+  onDelete(id, author) {
+    deleteBlog(id, author).then((res)=>{
       this.props.loadArticles()
      }).catch((err)=>{
       let message = getMessage(err)
@@ -64,10 +64,18 @@ class BlogDetails extends Component {
               {atc.create_time}
             </span>
           </Card.Meta>
+
+          <Label as='a' color='blue' image>
+              <img src={atc.author_avatar}/>
+              {atc.author_name}
+          </Label>
           <br/>
-          <Card.Description className='left aligned blog'>
+
+          <Container textAlign='justified'>
+          <Card.Description className='blog'>
             {atc.content}
           </Card.Description>
+          </Container>
         </Card.Content>
         <Card.Content extra >
             <a onClick={()=>this.onLike(match.params.id)}>
@@ -87,7 +95,7 @@ class BlogDetails extends Component {
           <Popup trigger={
               <button 
                 className="ui button negative" 
-                onClick={()=>this.onDelete(atc.postid)}>
+                onClick={()=>this.onDelete(atc.postid, atc.author)}>
                 Delete
               </button>
             }
@@ -98,7 +106,7 @@ class BlogDetails extends Component {
         </Card.Content>
 
         <hr/>
-        <CommentSection />
+        <CommentSection blogId={match.params.id}/>
       </Card>
     )
   }

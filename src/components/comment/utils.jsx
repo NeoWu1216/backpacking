@@ -21,16 +21,16 @@ function parseComments(comments) {
 
 function convertCommentsToUIHelper(comments, onReply) {
     return comments.map((c)=>{return (
-      <Comment >
-      <Comment.Avatar src='' />
+      <Comment key={c.commentid}>
+      <Comment.Avatar src={c.author_avatar} />
       <Comment.Content>
-        <Comment.Author as='a'>{c.username}</Comment.Author>
+        <Comment.Author as='a'>{c.author_name}</Comment.Author>
         <Comment.Metadata>
           <div>{c.comment_time}</div>
         </Comment.Metadata>
         <Comment.Text>{c.content}</Comment.Text>
         <Comment.Actions>
-          <Comment.Action onClick={onReply}>Reply</Comment.Action>
+          <Comment.Action onClick={onReply(c)}>Reply</Comment.Action>
         </Comment.Actions>
       </Comment.Content>
       <Comment.Group size='small'>
