@@ -25,6 +25,10 @@ class Profile extends Component {
     window.open("mailto:" + src, "_blank")
   }
 
+  openChat = (e) => {
+    window.open('http://localhost:8000'+'/chat/privateChat/', '_blank')
+  }
+
   componentDidMount() {
     let userid = this.props.match.params.id
     this.props.changeTab(1)
@@ -50,6 +54,10 @@ class Profile extends Component {
         <Label as='a' onClick={this.openMail(email)} color='blue'>
           <Icon name='mail' />
           Mail
+        </Label>
+        <Label as='a' onClick={this.openChat} color='blue'>
+          <Icon name='facebook messenger' />
+          Messenger
         </Label>
         <Grid columns={2} padded='vertically'>
           <Grid.Column>

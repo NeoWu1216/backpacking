@@ -70,6 +70,10 @@ class CommentSection extends Component {
     this.setState({ [e.target.id]: e.target.value })
   }
 
+  redirectUser = (userid) => {
+    this.props.history.push('/dashboard/user/'+userid)
+  }
+
   render() {
     let { commentList, hidden, parentUser, parentContent, content, formState}
       = this.state
@@ -77,7 +81,7 @@ class CommentSection extends Component {
     return (
       <Comment.Group className='centered twelve wide column'>
         <h1> Comment Section </h1>
-        {convertCommentsToUI(comments, this.onReply)}
+        {convertCommentsToUI(comments, this.onReply, this.redirectUser)}
         <Form reply 
           className='center'
           loading={formState === 'loading'}
@@ -105,4 +109,4 @@ class CommentSection extends Component {
 
   }
 }
-export default (CommentSection)
+export default withRouter(CommentSection)

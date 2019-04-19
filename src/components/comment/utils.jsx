@@ -19,12 +19,12 @@ function parseComments(comments) {
   return parseCommentHelper(comments, null).elems
 }
 
-function convertCommentsToUIHelper(comments, onReply) {
+function convertCommentsToUIHelper(comments, onReply, action) {
     return comments.map((c)=>{return (
-      <Comment key={c.commentid}>
+      <Comment key={c.commentid} >
       <Comment.Avatar src={c.author_avatar} />
       <Comment.Content>
-        <Comment.Author as='a'>{c.author_name}</Comment.Author>
+        <Comment.Author as='a' onClick={()=>action(c.userid)}>{c.author_name}</Comment.Author>
         <Comment.Metadata>
           <div>{c.comment_time}</div>
         </Comment.Metadata>
@@ -34,16 +34,16 @@ function convertCommentsToUIHelper(comments, onReply) {
         </Comment.Actions>
       </Comment.Content>
       <Comment.Group size='small'>
-        {convertCommentsToUIHelper(c.children, onReply)}
+        {convertCommentsToUIHelper(c.children, onReply, action)}
       </Comment.Group>
       </Comment>
     )})
 }
 
 
-function convertCommentsToUI(comments, onReply) {
+function convertCommentsToUI(comments, onReply, action) {
   return (
-    convertCommentsToUIHelper(comments, onReply)
+    convertCommentsToUIHelper(comments, onReply, action)
   )
 }
 
