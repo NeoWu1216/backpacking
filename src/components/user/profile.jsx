@@ -6,6 +6,7 @@ import { withRouter } from 'react-router-dom'
 import BlogList from '../blog/BlogList'
 import { changeTab } from '../../redux/actions'
 import { createChat } from '../../crud/chatroom'
+import { afterAuth } from '../../crud/common'
 
 const mapStateToProps = (state) => {
   return { articles: state.blog.articles }
@@ -27,7 +28,10 @@ class Profile extends Component {
   }
 
   openChat = (otherId) => (e) => {
-    createChat({send_to:otherId})
+    afterAuth((uid)=> {
+      window.open('http://localhost:8000'+'/chat/privateChat/'+uid+'/'+otherId, "_blank")
+    })
+    // createChat({send_to:otherId})
   }
 
   componentDidMount() {
