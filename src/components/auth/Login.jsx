@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Route, Redirect, withRouter } from 'react-router-dom'
 import FacebookLogin from 'react-facebook-login';
 import { appId, validateSession, getSession, saveSession } from './utils'
+import { getMessage } from '../../crud/common'
 import SignUp from './SignUp'
 
 
@@ -23,7 +24,7 @@ class Login extends Component {
       saveSession(userId, token)
       this.setState({ authenticated: true })
     }).catch((err) => {
-      if (err.status === 200) {
+      if (err.data === null) {
         saveSession(userId, token)
         this.setState({ signUp: true })
       } else {
@@ -34,20 +35,18 @@ class Login extends Component {
 
   componentDidMount() {
     let { userId, token } = getSession();
-    this.updateAuthentication(userId, token, (err) => console.error(err))
+    this.updateAuthentication(userId, token, (err) => console.error(getMessage(err)))
   }
 
   responseFacebook = (response) => {
     if ('error' in response) {
-      console.error(response.error)
-      console.error(response)
       alert(response.error)
-      console.warn(response.error)
       return
     }
+
     let { userID, accessToken, picture, name, email } = response;
     this.setState({ avatar: picture.data.url, name, email })
-    this.updateAuthentication(userID, accessToken, (err) => alert(err))
+    this.updateAuthentication(userID, accessToken, (err) => console.log('what',(err)))
   }
 
 

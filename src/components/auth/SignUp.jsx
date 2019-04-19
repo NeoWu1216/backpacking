@@ -24,7 +24,7 @@ class SignUp extends Component {
     validateSession(userId, token).then(() => {
       this.props.history.replace('/dashboard')
     }).catch((err) => {
-      if (err.status === 200) {
+      if (err.data === null) {
         this.setState({ userId })
       } else {
         this.props.history.replace('/dashboard')

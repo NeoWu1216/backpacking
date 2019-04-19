@@ -32,7 +32,7 @@ function validateSession(userId, token) {
   return axios.get('https://graph.facebook.com/debug_token?input_token='
         +token+'&access_token='+appToken).then((response)=> {
           let {is_valid, user_id} = response.data.data
-          if (!is_valid || user_id !== userId) throw "Authentication failed!"
+          if (!is_valid || user_id !== userId) throw "Authentication failed, userid don't match or is not valid!"
           return response
         }).then((response)=> {
           return facebookLogin(response.data.data.user_id).then((res)=>{
