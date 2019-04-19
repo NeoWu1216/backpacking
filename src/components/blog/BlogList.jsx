@@ -66,7 +66,7 @@ class BlogList extends Component {
     return (
       <Container>
         <Card.Group itemsPerRow={itemsPerRow || 3} stackable>
-          {articles.map(atc => (
+          {articles.filter((x)=>x).map(atc => (
             <Card key={atc.postid} onClick={() => this.onClickDetails(atc.postid)}>
               <Card.Content>
                 <Card.Header >

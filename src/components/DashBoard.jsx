@@ -12,6 +12,7 @@ import './main.css'
 import { getSession, validateSession, clearSession } from './auth/utils'
 import { getUserValidated } from '../crud/user';
 import Profile from '../components/user/profile'
+import BlogRecommendation from './blog/BlogRecommendation'
 
 
 const mapStateToProps = (state) => {
@@ -34,7 +35,8 @@ class DashBoard extends Component {
     super(props)
     this.leftTabs = [
       { name: "blogs", icon: "book" },
-      { name: "profile", icon: "user" }
+      { name: "profile", icon: "user" },
+      { name: "recommendation", icon:"eye"}
     ]
     this.rightTabs = [{ name: "logout", icon: "power off" }]
     this.state = {
@@ -76,6 +78,9 @@ class DashBoard extends Component {
       case 'logout':
         clearSession()
         this.props.history.replace('/');
+        break;
+      case 'recommendation':
+        this.props.history.push('/dashboard/recommendation')
         break;
       default:
         alert("incorrect key mapping for tabs")
@@ -172,7 +177,10 @@ class DashBoard extends Component {
           render={(props) => <BlogUpdate {...props} />}
         />
 
-
+        <Route
+          path="/dashboard/recommendation"
+          render={(props) => <BlogRecommendation {...props} />}
+        />
 
 
         <Route
