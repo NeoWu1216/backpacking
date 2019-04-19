@@ -7,6 +7,7 @@ import NotFound from './BlogNotFound'
 import {Popup} from 'semantic-ui-react'
 import {getMessage} from '../../crud/common'
 import CommentSection from '../comment/CommentSection'
+import { likePost, unlikePost } from '../../crud/like'
 import '../main.css'
 
 const mapStateToProps = (state) => {
@@ -43,9 +44,26 @@ class BlogDetails extends Component {
     })
   }
 
-  onLike(id) {
-    let article = this.props.articles.find(({postid})=>postid==id);
-    article.like += 1; //doesn't work
+  onLike(atc) {
+    if (!atc.like) {
+      likePost(atc.postid).then(()=> {
+        this.props.loadArticles()
+      }).catch((err)=>{
+        let message = getMessage(err)
+        alert(message)
+      })
+    } else {
+      unlikePost(atc.postid).then(()=>{
+        this.props.loadArticles()
+      }).catch((err)=>{
+        let message = getMessage(err)
+        alert(message)
+      })
+    }
+  }
+
+  redirectProfile = (uid) => () => {
+    this.props.history.push('/dashboard/user/'+uid)
   }
 
   render() {
@@ -65,7 +83,7 @@ class BlogDetails extends Component {
             </span>
           </Card.Meta>
 
-          <Label as='a' color='blue' image>
+          <Label as='a' color='blue' image onClick={this.redirectProfile(atc.author)}>
               <img src={atc.author_avatar}/>
               {atc.author_name}
           </Label>
@@ -78,11 +96,11 @@ class BlogDetails extends Component {
           </Container>
         </Card.Content>
         <Card.Content extra >
-            <a onClick={()=>this.onLike(match.params.id)}>
-            <Icon name='like' 
+          <div onClick={()=>this.onLike(atc)}>
+            <Icon name='like' color={(atc.like) ? 'red' : 'grey'}
             />
-            {atc.like} Likes
-            </a>
+            {atc.likenum} Likes
+          </div>
         </Card.Content>
         <Card.Content extra>
         <div className="ui buttons">

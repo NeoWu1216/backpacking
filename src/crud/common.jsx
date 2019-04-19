@@ -1,5 +1,5 @@
 import { getSession, validateSession } from '../components/auth/utils'
-
+import { facebookLogin } from './user'
 
 export const rootUrl = 'http://127.0.0.1:8000/'
 export function handleErrors(ok = 200) {
@@ -10,7 +10,7 @@ export function handleErrors(ok = 200) {
       throw Error(response.message);
     }
 
-    return response;
+    return response.data;
   }
 }
 
@@ -32,4 +32,14 @@ export function getStatusCode(err) {
 export function afterAuth(callback) {
   let { userId, token } = getSession()
   return validateSession(userId, token).then(callback)
+}
+
+export function unsecureAuth(callback) {
+  let { userId } = getSession()
+  return facebookLogin(userId).then((res)=>{
+    if (res.data === null) throw res
+    return res.data
+  }).then(
+    callback
+  )
 }

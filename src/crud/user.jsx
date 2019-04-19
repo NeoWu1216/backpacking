@@ -1,4 +1,4 @@
-import {rootUrl, handleErrors} from './common'
+import {rootUrl, handleErrors, afterAuth} from './common'
 import axios from 'axios'
 
 const baseUrl = rootUrl
@@ -16,4 +16,8 @@ export function facebookSignUp(body) {
 
 export function getUser(user_id) {
   return axios.get(baseUrl + 'users/' + user_id).then(handleErrors())
+}
+
+export function getUserValidated() {
+  return afterAuth((userid)=>getUser(userid))
 }

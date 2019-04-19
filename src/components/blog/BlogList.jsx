@@ -2,11 +2,12 @@ import React, { Component } from 'react'
 import { Card, Icon, Container, Label} from 'semantic-ui-react'
 import { connect } from 'react-redux'
 import { abbrev, date_to_str } from '../format'
-import { changeTab, likeArticle } from '../../redux/actions'
+import { changeTab} from '../../redux/actions'
 import { withRouter } from 'react-router-dom'
 import { Popup } from 'semantic-ui-react'
 import { deleteBlog, readBlogs } from '../../crud/blog'
 import { getMessage } from '../../crud/common'
+import { likePost, unlikePost } from '../../crud/like'
 
 const mapDispatchToProps = (dispatch) => {
   return {
@@ -34,21 +35,37 @@ class BlogList extends Component {
     })
   }
 
-  onLike(e, id) {
+  onLike(e, atc) {
     e.stopPropagation()
-    let article = this.props.articles.find(({ postid }) => postid == id);
-    article.like += 1; //doesn't work
+    if (!atc.like) {
+      likePost(atc.postid).then(()=> {
+        this.props.loadArticles()
+      }).catch((err)=>{
+        let message = getMessage(err)
+        alert(message)
+      })
+    } else {
+      unlikePost(atc.postid).then(()=>{
+        this.props.loadArticles()
+      }).catch((err)=>{
+        let message = getMessage(err)
+        alert(message)
+      })
+    }
   }
+
+
   onClickDetails(id) {
     this.props.history.push('/dashboard/blogs/details/' + id)
   }
 
 
   render() {
-    const { articles } = this.props;
+    const { articles, itemsPerRow} = this.props;
+    console.log(articles)
     return (
       <Container>
-        <Card.Group itemsPerRow={3} stackable>
+        <Card.Group itemsPerRow={itemsPerRow || 3} stackable>
           {articles.map(atc => (
             <Card key={atc.postid} onClick={() => this.onClickDetails(atc.postid)}>
               <Card.Content>
@@ -68,11 +85,11 @@ class BlogList extends Component {
                 </Card.Description>
               </Card.Content>
               <Card.Content extra>
-                <div onClick={(e) => this.onLike(e, atc.postid)}>
-                  <Icon name='like'
+                <div onClick={(e) => this.onLike(e, atc)}>
+                  <Icon name='like' color={(atc.like) ? 'red' : 'grey'}
                   />
                   {atc.likenum} Likes
-          </div>
+                </div>
               </Card.Content>
               <Card.Content extra>
                 <div className="ui buttons">

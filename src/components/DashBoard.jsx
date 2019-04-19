@@ -10,7 +10,8 @@ import { Divider } from 'semantic-ui-react';
 import { readBlogs } from '../crud/blog'
 import './main.css'
 import { getSession, validateSession, clearSession } from './auth/utils'
-
+import { getUserValidated } from '../crud/user';
+import Profile from '../components/user/profile'
 
 
 const mapStateToProps = (state) => {
@@ -37,16 +38,16 @@ class DashBoard extends Component {
     ]
     this.rightTabs = [{ name: "logout", icon: "power off" }]
     this.state = {
-      authenticated: undefined
+      authenticated: undefined,
+      userid : undefined
     }
   }
 
   componentDidMount() {
-    let { userId, token } = getSession()
-    validateSession(userId, token).then(() => {
-      this.setState({ authenticated: true })
+    getUserValidated().then((data) => {
+      this.setState({ authenticated: true, userid: data.userid})
       this.props.loadArticles()
-    }).catch(() => {
+    }).catch((err) => {
       this.setState({ authenticated: false })
     })
   }
@@ -57,11 +58,9 @@ class DashBoard extends Component {
   }
 
 
-  componentWillMount() {
-  }
-
   redirect = (ix) => {
     let tab;
+    let {userid} = this.state
     if (ix < this.leftTabs.length) {
       tab = this.leftTabs[ix];
     } else {
@@ -72,7 +71,7 @@ class DashBoard extends Component {
         this.props.history.push('/dashboard/blogs');
         break;
       case 'profile':
-        this.props.history.push('/dashboard/profile');
+        this.props.history.push('/dashboard/user/'+userid);
         break;
       case 'logout':
         clearSession()
@@ -133,7 +132,7 @@ class DashBoard extends Component {
 
 
         <Route
-          exact path="/dashboard"
+          exact path="/dashboard/details/:id"
           render={() => <Redirect to="/dashboard/blogs" />}
         />
 
@@ -145,6 +144,17 @@ class DashBoard extends Component {
         />
 
         <Divider hidden />
+
+
+        <Route
+          path="/dashboard/user/:id"
+          render={(props) => <Profile {...props} />}
+        />
+        
+        <Route
+          exact path="/dashboard"
+          render={() => <Redirect to="/dashboard/blogs" />}
+        />
 
         <Route
           path="/dashboard/blogs/create"

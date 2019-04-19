@@ -1,29 +1,37 @@
 import axios from 'axios'
-import { rootUrl, handleErrors, afterAuth} from './common'
+import { rootUrl, handleErrors, afterAuth, unsecureAuth} from './common'
 import { readArticleBegin, readArticleFailure, readArticleSuccess } from '../redux/actions'
 import { getUser } from './user'
+import { getSession } from '../components/auth/utils'
+import {getLike} from './like'
 
 const baseUrl = rootUrl + 'blogpost/'
 
 export function readBlogs() {
+  // read blog is relatively not important
+  // can loosen read limit by not additional validate
+  let fbId = getSession().userId
   return dispatch => {
     dispatch(readArticleBegin())
-    afterAuth(()=>axios.get(baseUrl + 'list/')
+    unsecureAuth(fbId).then(userId=>{
+      return axios.get(baseUrl + 'list/')
       .then(handleErrors())
-      .then(json => {
-        return json.data
-      })
       .then(data => {
         return Promise.all(data.map((elem)=>{
           return getUser(elem.author).then((res)=>{
-            let {email, profile_pic, username} = res.data
+            let {email, profile_pic, username} = res
             elem.author_email = email
             elem.author_name = username
             elem.author_avatar = profile_pic
             return elem
+          }).then((elem)=> {
+            return getLike(elem.postid, userId).then((like)=>{
+              elem.like = like
+              return elem
+            })
           })
         }))
-      })
+      })})
       .then((data)=>{
         dispatch(readArticleSuccess(data));
         return data
@@ -31,7 +39,7 @@ export function readBlogs() {
       .catch(error => {
         dispatch(readArticleFailure(error))
         console.error('read article failed', error)
-      }));
+      });
   }
 }
 
