@@ -5,6 +5,7 @@ import { Grid, Image, Label, Icon, Segment } from 'semantic-ui-react'
 import { withRouter } from 'react-router-dom'
 import BlogList from '../blog/BlogList'
 import { changeTab } from '../../redux/actions'
+import { createChat } from '../../crud/chatroom'
 
 const mapStateToProps = (state) => {
   return { articles: state.blog.articles }
@@ -25,8 +26,8 @@ class Profile extends Component {
     window.open("mailto:" + src, "_blank")
   }
 
-  openChat = (e) => {
-    window.open('http://localhost:8000'+'/chat/privateChat/', '_blank')
+  openChat = (otherId) => (e) => {
+    createChat({send_to:otherId})
   }
 
   componentDidMount() {
@@ -55,7 +56,7 @@ class Profile extends Component {
           <Icon name='mail' />
           Mail
         </Label>
-        <Label as='a' onClick={this.openChat} color='blue'>
+        <Label as='a' onClick={this.openChat(userid)} color='blue'>
           <Icon name='facebook messenger' />
           Messenger
         </Label>
