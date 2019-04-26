@@ -20,7 +20,7 @@ class BlogOrderingList extends Component {
     super(props)
     this.state = {
       keyword : "",
-      sortOption : this.SORT_OPTIONS[0].value,
+      sortOption : this.SORT_OPTIONS[2].value,
       asc : false
     }
   }
